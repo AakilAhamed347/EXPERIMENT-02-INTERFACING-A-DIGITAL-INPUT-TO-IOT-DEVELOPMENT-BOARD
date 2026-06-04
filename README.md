@@ -1,13 +1,13 @@
 # EXPERIMENT 02 INTERFACING A DIGITAL INPUT OUTPUT TO IOT DEVELOPMENT BOARD
 
 
-**DATE:** 21-05-2026
+**DATE:** 12/05/2026
 
 **NAME:** AAKIL AHAMED S
 
 **ROLL NO:** 212224040002
 
-**DEPARTMENT:** Computer Science and Engineering
+**DEPARTMENT:** COMPUTER SCIENCE ENGINEERING
 
 ## Aim
 
@@ -103,6 +103,8 @@ IR technology is used in a wide range of wireless applications which includes re
 
 ```
 #include "main.h"
+#include <stdbool.h>
+bool IRSENSOR;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -112,20 +114,19 @@ int main(void)
   HAL_Init();
   SystemClock_Config();
   MX_GPIO_Init();
-
   while (1)
   {
-    int Sensor_value;
-    Sensor_value = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4);
-    if (Sensor_value == 0) {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
-      HAL_Delay(1000);
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
-      HAL_Delay(1000);
-    } else {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
-      HAL_Delay(1000);
-    }
+	  IRSENSOR = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4);
+	  if(IRSENSOR == 0){
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+		  HAL_Delay(2000);
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+		  HAL_Delay(2000);
+	  }
+	  else{
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+		  HAL_Delay(2000);
+	  }
   }
 }
 
@@ -133,8 +134,6 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
 
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
   RCC_OscInitStruct.MSIState = RCC_MSI_ON;
@@ -145,10 +144,9 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK3 | RCC_CLOCKTYPE_HCLK
-                              | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1
-                              | RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK3|RCC_CLOCKTYPE_HCLK
+                              |RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1
+                              |RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_MSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -161,6 +159,7 @@ void SystemClock_Config(void)
   }
 }
 
+
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -172,7 +171,7 @@ static void MX_GPIO_Init(void)
 
   GPIO_InitStruct.Pin = GPIO_PIN_4;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   GPIO_InitStruct.Pin = GPIO_PIN_0;
@@ -180,30 +179,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
 }
-
-void Error_Handler(void)
-{
-  __disable_irq();
-  while (1) {}
-}
-
-#ifdef USE_FULL_ASSERT
-void assert_failed(uint8_t *file, uint32_t line) {}
-#endif
-
 ```
 
 ## OUTPUT
-
-### Without Obstacle:
-
-<img width="1280" height="789" alt="WhatsApp Image 2026-05-12 at 09 40 23" src="https://github.com/user-attachments/assets/921251af-1ece-498e-a92f-9fba862ee35d" />
+## ON:
+<img width="900" height="1600" alt="iot2_on" src="https://github.com/user-attachments/assets/5cd2b7bb-c233-4a22-8ff4-4d6ab4826008" />
 
 
-### With Obstacle:
-
-<img width="1280" height="698" alt="WhatsApp Image 2026-05-12 at 09 40 24" src="https://github.com/user-attachments/assets/ce8dcd18-0158-4fc0-a48c-d385b7602ddc" />
+## OFF:
+<img width="900" height="1600" alt="iot2_off" src="https://github.com/user-attachments/assets/1c894ef1-0986-4cd8-9c67-67eef90a6727" />
 
 
 ## Result
